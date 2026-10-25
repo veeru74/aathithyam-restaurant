@@ -231,7 +231,7 @@
           <i data-lucide="utensils" class="w-4 h-4 text-brand-gold"></i>
           Reserve Table
         </button>
-        <a id="heroWhatsAppBtn" href="https://wa.me/919182700145?text=Hello%20Aathithyam!%20I%20would%20like%20to%20make%20an%20inquiry." target="_blank" class="px-7 py-3.5 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white font-semibold text-sm tracking-wide transition-all flex items-center gap-2">
+        <a id="heroWhatsAppBtn" href="https://wa.me/919182760166?text=Hello%20Aathithyam!%20I%20would%20like%20to%20make%20an%20inquiry." target="_blank" class="px-7 py-3.5 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white font-semibold text-sm tracking-wide transition-all flex items-center gap-2">
           <i data-lucide="message-circle" class="w-4 h-4"></i>
           WhatsApp Us
         </a>
@@ -757,8 +757,8 @@
 
     // Default Restaurant Meta Info
     const defaultInfo = {
-      phone: "+91 9182700145",
-      cleanPhone: "919182700145",
+      phone: "+91 9182760166",
+      cleanPhone: "919182760166",
       instagram: "@aathithyam26",
       announcement: "Welcome to Aathithyam • Authentic Flavours & Warm Hospitality at Gandimaisamma",
       heroBadge: "Gandimaisamma's Favorite Family Dine-in",
@@ -1460,7 +1460,7 @@
       whatsappMsg += `*Total Order Value:* ₹${total}\n\n`;
       whatsappMsg += `_Please acknowledge this order & let me know the preparation time._`;
 
-      const cleanPhone = (restaurantInfo.phone || "919182700145").replace(/[^0-9]/g, '');
+      const cleanPhone = (restaurantInfo.phone || "919182760166").replace(/[^0-9]/g, '');
       const encoded = encodeURIComponent(whatsappMsg);
       const url = `https://wa.me/${cleanPhone}?text=${encoded}`;
       window.open(url, "_blank");
@@ -1510,7 +1510,7 @@
       msg += `------------------------------------\n`;
       msg += `_Kindly confirm the table availability._`;
 
-      const cleanPhone = (restaurantInfo.phone || "919182700145").replace(/[^0-9]/g, '');
+      const cleanPhone = (restaurantInfo.phone || "919182760166").replace(/[^0-9]/g, '');
       const encoded = encodeURIComponent(msg);
       window.open(`https://wa.me/${cleanPhone}?text=${encoded}`, "_blank");
       closeReservationModal();
