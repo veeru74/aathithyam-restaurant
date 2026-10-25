@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aathithyam (ఆతిథ్యం) | Multi-Cuisine Family Restaurant - Gandimaisamma, Hyderabad</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#E5A93C',
+              goldLight: '#F5D061',
+              goldDark: '#B37D1A',
+              dark: '#120D0A',
+              card: '#1A1410',
+              cardHover: '#231B15',
+              crimson: '#831818',
+              crimsonDark: '#500b0b',
+              accent: '#D47E24',
+              veg: '#16a34a',
+              nonveg: '#dc2626'
+            }
+          },
+          fontFamily: {
+            heading: ['"Cinzel"', 'serif'],
+            telugu: ['"Rozha One"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #120D0A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #3a2b1f;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #E5A93C;
+    }
+
+    /* Ambient Gold Shimmer */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FFF3D6 0%, #F5D061 50%, #B37D1A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Admin Editable Visual styling */
+    body.admin-mode [data-editable="text"]:hover,
+    body.admin-mode [data-editable="info"]:hover {
+      outline: 2px dashed #E5A93C;
+      outline-offset: 3px;
+      cursor: text;
+      background: rgba(229, 169, 60, 0.08);
+      border-radius: 4px;
+    }
+    body.admin-mode [data-editable="text"]:focus,
+    body.admin-mode [data-editable="info"]:focus {
+      outline: 2px solid #F5D061;
+      background: rgba(229, 169, 60, 0.15);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-[#120D0A] text-[#F3ECE4] font-sans antialiased selection:bg-brand-gold selection:text-black min-h-screen flex flex-col justify-between">
+
+  <!-- ================= ADMIN LIVE BANNER (VISIBLE WHEN ADMIN IS ON) ================= -->
+  <div id="adminBanner" class="hidden sticky top-0 z-50 bg-amber-500 text-stone-950 px-4 py-2 text-xs font-semibold shadow-xl border-b border-amber-600">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center justify-center px-2 py-0.5 rounded bg-black text-amber-400 text-[10px] uppercase font-bold tracking-wider">Owner Mode</span>
+        <span class="font-bold">Admin Active:</span>
+        <span class="text-stone-900 hidden sm:inline">Click any text directly on the page to edit. Use buttons on dishes to change prices, toggle Sold-out, or add items.</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="saveAllEditsManual()" class="px-2.5 py-1 bg-stone-950 text-amber-300 rounded font-medium text-[11px] hover:bg-stone-800 transition flex items-center gap-1">
+          <i data-lucide="save" class="w-3.5 h-3.5"></i> Save All
+        </button>
+        <button onclick="exportMenuBackup()" class="px-2.5 py-1 bg-stone-950/80 text-white rounded font-medium text-[11px] hover:bg-stone-800 transition flex items-center gap-1">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i> Backup JSON
+        </button>
+        <label class="px-2.5 py-1 bg-stone-950/80 text-white rounded font-medium text-[11px] hover:bg-stone-800 transition flex items-center gap-1 cursor-pointer">
+          <i data-lucide="upload" class="w-3.5 h-3.5"></i> Restore
+          <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importMenuBackup(event)">
+        </label>
+        <button onclick="resetToOriginalDefaults()" class="px-2 py-1 bg-red-900 text-white rounded font-medium text-[11px] hover:bg-red-800 transition" title="Reset all changes back to factory defaults">
+          Reset
+        </button>
+        <button onclick="toggleAdminMode()" class="px-2.5 py-1 bg-stone-900 text-stone-200 rounded font-semibold text-[11px] hover:bg-black transition">
+          Exit Edit Mode
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TOP ANNOUNCEMENT BAR ================= -->
+  <div class="bg-gradient-to-r from-brand-crimsonDark via-brand-crimson to-brand-crimsonDark text-xs py-2 px-4 text-center text-amber-100 flex items-center justify-center gap-2 border-b border-amber-900/40">
+    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-goldLight animate-pulse"></i>
+    <span data-editable="info" data-key="announcement" onblur="handleInfoBlur(this)">Welcome to Aathithyam • Authentic Flavours & Warm Hospitality at Gandimaisamma</span>
+    <span class="hidden md:inline text-amber-300 font-semibold">• Call: <span data-editable="info" data-key="phone" onblur="handleInfoBlur(this)">+91 9182700145</span></span>
+  </div>
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <nav class="sticky top-0 z-40 bg-[#120D0A]/95 backdrop-blur-md border-b border-brand-gold/15 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand Logo / Emblem -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="w-12 h-12 rounded-full border border-brand-gold/40 bg-gradient-to-br from-amber-950 to-stone-900 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+            <i data-lucide="utensils" class="w-6 h-6 text-brand-gold"></i>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xl sm:text-2xl font-bold tracking-wider font-heading gold-gradient-text">AATHITHYAM</span>
+              <span class="text-sm text-brand-gold/80 font-serif font-normal hidden sm:inline">(ఆతిథ్యం)</span>
+            </div>
+            <span class="text-[10px] tracking-[0.2em] uppercase text-stone-400 font-medium">Multi-Cuisine Family Restaurant</span>
+          </div>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+          <a href="#about" class="text-stone-300 hover:text-brand-gold transition-colors">Our Story</a>
+          <a href="#menu" class="text-stone-300 hover:text-brand-gold transition-colors">Digital Menu</a>
+          <a href="#experience" class="text-stone-300 hover:text-brand-gold transition-colors">Ambience</a>
+          <a href="#location" class="text-stone-300 hover:text-brand-gold transition-colors">Find Us</a>
+        </div>
+
+        <!-- Action CTAs & Owner Toggle -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button onclick="toggleAdminPrompt()" id="ownerToggleBtn" class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-stone-900/90 border border-stone-700 text-stone-300 hover:border-brand-gold hover:text-amber-300 transition-all shadow" title="Owner live page edit mode">
+            <i data-lucide="lock" class="w-3.5 h-3.5 text-brand-gold"></i>
+            <span class="hidden lg:inline">Owner Login</span>
+          </button>
+          
+          <button onclick="openReservationModal()" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wider rounded-lg border border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10 transition-all">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            Book Table
+          </button>
+          
+          <button onclick="openCartModal()" class="relative flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wider rounded-lg bg-gradient-to-r from-brand-gold to-brand-goldDark text-stone-950 shadow-md hover:brightness-110 transition-all">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Order Cart</span>
+            <span id="navCartCount" class="bg-brand-crimson text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-16 px-4">
+    <!-- Atmospheric Background with Vignette -->
+    <div class="absolute inset-0 z-0 bg-cover bg-center opacity-30" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80');"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#120D0A] via-[#120D0A]/85 to-transparent z-0"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,169,60,0.1)_0,transparent_70%)] z-0"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto text-center space-y-6">
+      
+      <!-- Traditional Arch Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-card/90 border border-brand-gold/40 text-brand-goldLight text-xs tracking-widest uppercase">
+        <i data-lucide="crown" class="w-3.5 h-3.5 text-brand-gold"></i>
+        <span data-editable="info" data-key="heroBadge" onblur="handleInfoBlur(this)">Gandimaisamma's Favorite Family Dine-in</span>
+      </div>
+
+      <!-- Main Headline -->
+      <div class="space-y-2">
+        <h2 class="text-2xl sm:text-3xl text-brand-gold font-telugu tracking-wide">ఆతిథ్యం</h2>
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight font-heading gold-gradient-text uppercase">
+          Aathithyam
+        </h1>
+        <p data-editable="info" data-key="tagline" onblur="handleInfoBlur(this)" class="text-lg sm:text-2xl font-light text-stone-300 font-serif italic pt-1">
+          "Good Food Brings People Together"
+        </p>
+      </div>
+
+      <!-- Pillars -->
+      <p data-editable="info" data-key="subPillars" onblur="handleInfoBlur(this)" class="text-xs sm:text-sm tracking-widest text-amber-200/80 uppercase font-medium">
+        Great Food • Great Vibes • Great Memories
+      </p>
+
+      <!-- Highlights Pills -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto pt-4 text-xs">
+        <div class="p-3 rounded-xl bg-stone-900/60 border border-amber-900/30 flex flex-col items-center gap-1.5">
+          <i data-lucide="flame" class="w-5 h-5 text-brand-gold"></i>
+          <span class="font-semibold text-stone-200">Authentic Flavours</span>
+        </div>
+        <div class="p-3 rounded-xl bg-stone-900/60 border border-amber-900/30 flex flex-col items-center gap-1.5">
+          <i data-lucide="leaf" class="w-5 h-5 text-green-400"></i>
+          <span class="font-semibold text-stone-200">Fresh Ingredients</span>
+        </div>
+        <div class="p-3 rounded-xl bg-stone-900/60 border border-amber-900/30 flex flex-col items-center gap-1.5">
+          <i data-lucide="users" class="w-5 h-5 text-brand-gold"></i>
+          <span class="font-semibold text-stone-200">Family Friendly</span>
+        </div>
+        <div class="p-3 rounded-xl bg-stone-900/60 border border-amber-900/30 flex flex-col items-center gap-1.5">
+          <i data-lucide="heart" class="w-5 h-5 text-rose-400"></i>
+          <span class="font-semibold text-stone-200">Warm Hospitality</span>
+        </div>
+      </div>
+
+      <!-- Primary CTAs -->
+      <div class="flex flex-wrap items-center justify-center gap-4 pt-6">
+        <a href="#menu" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-brand-gold to-brand-goldDark text-stone-950 font-bold text-sm tracking-wide shadow-lg hover:shadow-brand-gold/20 hover:scale-105 transition-all flex items-center gap-2">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+          Explore Menu & Order
+        </a>
+        <button onclick="openReservationModal()" class="px-7 py-3.5 rounded-xl bg-brand-card hover:bg-brand-cardHover border border-brand-gold/40 text-stone-200 font-semibold text-sm tracking-wide transition-all flex items-center gap-2">
+          <i data-lucide="utensils" class="w-4 h-4 text-brand-gold"></i>
+          Reserve Table
+        </button>
+        <a id="heroWhatsAppBtn" href="https://wa.me/919182700145?text=Hello%20Aathithyam!%20I%20would%20like%20to%20make%20an%20inquiry." target="_blank" class="px-7 py-3.5 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white font-semibold text-sm tracking-wide transition-all flex items-center gap-2">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          WhatsApp Us
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= ABOUT / SIGNATURE SHOWCASE ================= -->
+  <section id="about" class="py-16 bg-[#17110C] border-y border-brand-gold/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        
+        <div class="space-y-6">
+          <div class="inline-flex items-center gap-2 text-brand-gold text-xs tracking-widest uppercase">
+            <span class="w-6 h-[1px] bg-brand-gold"></span>
+            Traditional Flavours, Modern Comfort
+          </div>
+          <h2 data-editable="info" data-key="aboutTitle" onblur="handleInfoBlur(this)" class="text-3xl sm:text-4xl font-heading font-bold text-stone-100 leading-tight">
+            Hyderabad’s Rich Culinary Heritage, Served with Love.
+          </h2>
+          <p data-editable="info" data-key="aboutDesc" onblur="handleInfoBlur(this)" class="text-stone-300 text-sm sm:text-base leading-relaxed">
+            At Aathithyam (ఆతిథ్యం), we believe every meal is a celebration. Located conveniently at Gandimaisamma, we offer families and food enthusiasts an authentic feast of fragrant slow-cooked Biryanis, sizzling clay-oven tandoori starters, creamy gravies, and comforting multi-cuisine delights.
+          </p>
+
+          <div class="grid grid-cols-2 gap-4 pt-2">
+            <div class="p-4 rounded-xl bg-stone-900/80 border border-brand-gold/20">
+              <span class="block text-2xl font-bold font-heading text-brand-gold">100%</span>
+              <span class="text-xs text-stone-400">Authentic Spice Blends & Fresh Farm Meats</span>
+            </div>
+            <div class="p-4 rounded-xl bg-stone-900/80 border border-brand-gold/20">
+              <span class="block text-2xl font-bold font-heading text-brand-gold">Multi</span>
+              <span class="text-xs text-stone-400">Cuisine Menu for All Age Groups</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-6 pt-2">
+            <div class="flex items-center gap-3">
+              <i data-lucide="phone-call" class="w-6 h-6 text-brand-gold"></i>
+              <div>
+                <p class="text-[11px] text-stone-400 uppercase">Direct Counter Call</p>
+                <a id="aboutPhoneLink" href="tel:9182700145" class="text-sm font-bold text-amber-200 hover:underline"><span data-editable="info" data-key="phone" onblur="handleInfoBlur(this)">+91 9182700145</span></a>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <i data-lucide="instagram" class="w-6 h-6 text-pink-400"></i>
+              <div>
+                <p class="text-[11px] text-stone-400 uppercase">Follow Our Specials</p>
+                <a id="aboutInstaLink" href="https://instagram.com/aathithyam26" target="_blank" class="text-sm font-bold text-amber-200 hover:underline"><span data-editable="info" data-key="instagram" onblur="handleInfoBlur(this)">@aathithyam26</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured Dish Cards Grid -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-4">
+            <div class="relative overflow-hidden rounded-2xl group border border-amber-900/30">
+              <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80" alt="Hyderabadi Biryani" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+                <span class="text-xs font-semibold text-amber-200">Special Dum Biryani</span>
+              </div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl group border border-amber-900/30">
+              <img src="https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=600&q=80" alt="Tandoori Starters" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+                <span class="text-xs font-semibold text-amber-200">Smoky Tandoori Platters</span>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-4 pt-6">
+            <div class="relative overflow-hidden rounded-2xl group border border-amber-900/30">
+              <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80" alt="Paneer Gravy & Naan" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+                <span class="text-xs font-semibold text-amber-200">Rich Gravies & Naans</span>
+              </div>
+            </div>
+            <div class="relative overflow-hidden rounded-2xl group border border-amber-900/30">
+              <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80" alt="Desserts" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+                <span class="text-xs font-semibold text-amber-200">Decadent Desserts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DIGITAL MENU SECTION ================= -->
+  <section id="menu" class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Title -->
+      <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
+        <span class="text-brand-gold text-xs tracking-widest uppercase">Explore Our Kitchen</span>
+        <h2 class="text-3xl sm:text-4xl font-heading font-bold gold-gradient-text">Interactive Digital Menu</h2>
+        <p class="text-stone-400 text-xs sm:text-sm">Click "+ Add" on items to build your direct WhatsApp takeaway or delivery order with zero commissions.</p>
+      </div>
+
+      <!-- Menu Category Filter Tabs & Add Dish Button in Admin Mode -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+        <div class="flex flex-wrap items-center justify-center gap-2" id="categoryFilters">
+          <button onclick="filterMenu('all')" class="category-btn active px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all bg-brand-gold text-stone-950 shadow-md">
+            All Specialities
+          </button>
+          <button onclick="filterMenu('biryani')" class="category-btn px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all bg-stone-900 border border-stone-800 text-stone-300 hover:border-brand-gold/50">
+            Biryanis & Pulaos
+          </button>
+          <button onclick="filterMenu('starters')" class="category-btn px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all bg-stone-900 border border-stone-800 text-stone-300 hover:border-brand-gold/50">
+            Tandoor & Starters
+          </button>
+          <button onclick="filterMenu('curries')" class="category-btn px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all bg-stone-900 border border-stone-800 text-stone-300 hover:border-brand-gold/50">
+            Curries & Roti/Naan
+          </button>
+          <button onclick="filterMenu('desserts')" class="category-btn px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all bg-stone-900 border border-stone-800 text-stone-300 hover:border-brand-gold/50">
+            Desserts & Drinks
+          </button>
+        </div>
+
+        <!-- Add Dish Button (Visible in Edit Mode) -->
+        <button id="addDishBtn" onclick="openDishModal()" class="hidden px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-lg text-xs font-bold shadow-lg hover:brightness-110 flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          + Add New Dish
+        </button>
+      </div>
+
+      <!-- Menu Grid -->
+      <div id="menuContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= AMBIENCE & FAMILY EXPERIENCES ================= -->
+  <section id="experience" class="py-16 bg-[#17110C] border-t border-brand-gold/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
+      <div class="max-w-2xl mx-auto space-y-2">
+        <span class="text-brand-gold text-xs tracking-widest uppercase">The Aathithyam Vibe</span>
+        <h2 class="text-3xl sm:text-4xl font-heading font-bold text-stone-100">Designed for Family Gatherings</h2>
+        <p class="text-stone-400 text-sm">Comfortable booth seating, festive lighting, and a hygienic, peaceful dining floor in Gandimaisamma.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl bg-brand-card border border-brand-gold/15 text-left space-y-4 hover:border-brand-gold/40 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-amber-950/60 border border-brand-gold/30 flex items-center justify-center">
+            <i data-lucide="party-popper" class="w-6 h-6 text-brand-gold"></i>
+          </div>
+          <h3 class="text-lg font-bold font-heading text-amber-100">Birthday & Anniversary Parties</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">Celebrate milestone moments with pre-reserved group tables and custom party starter platters curated for you.</p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-brand-card border border-brand-gold/15 text-left space-y-4 hover:border-brand-gold/40 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-amber-950/60 border border-brand-gold/30 flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-6 h-6 text-emerald-400"></i>
+          </div>
+          <h3 class="text-lg font-bold font-heading text-amber-100">Clean & Hygienic Kitchen</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">We strictly use premium unadulterated spices, fresh meats, and maintain high sanitation standards for your family.</p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-brand-card border border-brand-gold/15 text-left space-y-4 hover:border-brand-gold/40 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-amber-950/60 border border-brand-gold/30 flex items-center justify-center">
+            <i data-lucide="package" class="w-6 h-6 text-brand-gold"></i>
+          </div>
+          <h3 class="text-lg font-bold font-heading text-amber-100">Catering & Bulk Takeaway</h3>
+          <p class="text-xs text-stone-400 leading-relaxed">Ordering for 10 or 50 people? Call our counter directly for handi biryani orders and bulk curry combos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LOCATION & CONTACT ================= -->
+  <section id="location" class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-br from-stone-900 to-amber-950/40 rounded-3xl p-8 sm:p-12 border border-brand-gold/30 shadow-2xl">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          
+          <div class="space-y-6">
+            <div class="inline-flex items-center gap-2 text-brand-gold text-xs tracking-widest uppercase">
+              <i data-lucide="map-pin" class="w-4 h-4"></i>
+              Visit Us in Gandimaisamma
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white">Join Us for Lunch or Dinner</h2>
+            <p class="text-stone-300 text-sm leading-relaxed">
+              We look forward to serving you and your family delicious multi-cuisine meals. Call ahead for quick takeaway or table reservations.
+            </p>
+
+            <div class="space-y-4 text-sm">
+              <div class="flex items-start gap-3">
+                <i data-lucide="navigation" class="w-5 h-5 text-brand-gold shrink-0 mt-0.5"></i>
+                <span class="text-stone-300"><span data-editable="info" data-key="address" onblur="handleInfoBlur(this)">Aathithyam Multi-Cuisine Family Restaurant, Gandimaisamma, Hyderabad, Telangana.</span></span>
+              </div>
+              <div class="flex items-center gap-3">
+                <i data-lucide="phone" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                <span class="text-stone-300">Orders & Reservations: <strong><span data-editable="info" data-key="phone" onblur="handleInfoBlur(this)">+91 9182700145</span></strong></span>
+              </div>
+              <div class="flex items-center gap-3">
+                <i data-lucide="clock" class="w-5 h-5 text-brand-gold shrink-0"></i>
+                <span class="text-stone-300">Open Everyday: <strong><span data-editable="info" data-key="hours" onblur="handleInfoBlur(this)">11:30 AM – 11:00 PM</span></strong></span>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-3 pt-2">
+              <a href="https://maps.google.com/?q=Gandimaisamma+Hyderabad" target="_blank" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold uppercase tracking-wider border border-stone-700 transition-all">
+                <i data-lucide="map" class="w-4 h-4 text-brand-gold"></i>
+                Open in Maps
+              </a>
+              <a id="locationCallBtn" href="tel:9182700145" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-brand-gold to-brand-goldDark text-stone-950 text-xs font-bold uppercase tracking-wider shadow-md hover:brightness-110 transition-all">
+                <i data-lucide="phone-call" class="w-4 h-4"></i>
+                Call Desk
+              </a>
+              <a id="locationInstaBtn" href="https://instagram.com/aathithyam26" target="_blank" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-stone-800 hover:bg-pink-900/40 text-stone-200 text-xs font-semibold uppercase tracking-wider border border-pink-900/40 transition-all">
+                <i data-lucide="instagram" class="w-4 h-4 text-pink-400"></i>
+                <span data-editable="info" data-key="instagram" onblur="handleInfoBlur(this)">@aathithyam26</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Embedded Map Preview Card -->
+          <div class="rounded-2xl overflow-hidden border border-amber-900/40 shadow-inner bg-stone-950 p-2 relative h-72 sm:h-80 flex flex-col items-center justify-center text-center">
+            <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="relative z-10 p-6 space-y-4 bg-stone-900/90 rounded-xl border border-brand-gold/30 max-w-sm">
+              <div class="w-10 h-10 rounded-full bg-brand-gold text-stone-950 flex items-center justify-center mx-auto shadow-md">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold font-heading text-amber-200 text-base">Gandimaisamma Junction</h4>
+              <p class="text-xs text-stone-300">Easily accessible with ample two-wheeler and four-wheeler parking for families.</p>
+              <a href="https://maps.google.com/?q=Gandimaisamma+Hyderabad" target="_blank" class="inline-block text-xs font-bold text-brand-goldLight hover:underline">
+                Get Turn-by-Turn Directions &rarr;
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-[#0B0806] border-t border-stone-800/80 py-10 text-stone-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full border border-brand-gold/30 bg-stone-900 flex items-center justify-center">
+          <i data-lucide="utensils" class="w-4 h-4 text-brand-gold"></i>
+        </div>
+        <div>
+          <span class="font-heading font-bold text-stone-200 text-sm">Aathithyam (ఆతిథ్యం)</span>
+          <p class="text-[10px] text-stone-500">Gandimaisamma, Hyderabad • Multi-Cuisine Family Restaurant</p>
+        </div>
+      </div>
+
+      <div class="flex gap-6">
+        <a href="#about" class="hover:text-brand-gold transition-colors">Our Story</a>
+        <a href="#menu" class="hover:text-brand-gold transition-colors">Menu</a>
+        <a id="footerPhoneLink" href="tel:9182700145" class="hover:text-brand-gold transition-colors">+91 9182700145</a>
+        <a id="footerInstaLink" href="https://instagram.com/aathithyam26" target="_blank" class="hover:text-brand-gold transition-colors">Instagram</a>
+      </div>
+
+      <p class="text-stone-500 text-[11px]">
+        &copy; 2026 Aathithyam Restaurant. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ================= FLOATING ACTION BAR (MOBILE) ================= -->
+  <div class="fixed bottom-4 left-4 right-4 z-40 md:hidden flex gap-2">
+    <button onclick="openReservationModal()" class="flex-1 py-3 bg-stone-900/95 backdrop-blur-md border border-brand-gold/40 text-brand-gold rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-xl">
+      <i data-lucide="calendar" class="w-4 h-4"></i>
+      Reserve Table
+    </button>
+    <button onclick="openCartModal()" class="flex-1 py-3 bg-gradient-to-r from-brand-gold to-brand-goldDark text-stone-950 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-xl">
+      <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+      Cart (<span id="mobileBarCartCount">0</span>)
+    </button>
+  </div>
+
+  <!-- ================= ORDER CART MODAL / SIDEBAR ================= -->
+  <div id="cartModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex justify-end">
+    <div class="w-full max-w-md bg-[#16110D] h-full flex flex-col border-l border-brand-gold/20 shadow-2xl p-6 overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-stone-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-brand-gold"></i>
+          <h3 class="font-heading font-bold text-lg text-amber-100">Your Takeaway Order</h3>
+        </div>
+        <button onclick="closeCartModal()" class="text-stone-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Cart Items List -->
+      <div id="cartItemList" class="flex-1 py-4 space-y-3 overflow-y-auto">
+        <!-- Dynamically injected cart items -->
+      </div>
+
+      <!-- Order Details Form -->
+      <div class="space-y-3 pt-4 border-t border-stone-800 text-xs">
+        <div>
+          <label class="block text-stone-400 mb-1 font-medium">Order Type</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" onclick="setOrderType('Takeaway / Pickup')" id="optTakeaway" class="py-2 rounded-lg bg-brand-gold text-stone-950 font-bold border border-brand-gold">Takeaway / Pickup</button>
+            <button type="button" onclick="setOrderType('Home Delivery')" id="optDelivery" class="py-2 rounded-lg bg-stone-900 text-stone-300 font-bold border border-stone-700">Home Delivery</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-stone-400 mb-1 font-medium">Your Name</label>
+          <input type="text" id="custName" placeholder="e.g. Rahul Sharma" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+        </div>
+
+        <div id="addressFieldContainer" class="hidden">
+          <label class="block text-stone-400 mb-1 font-medium">Delivery Address / Landmark</label>
+          <input type="text" id="custAddress" placeholder="e.g. Flat 301, Near Gandimaisamma Circle" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+        </div>
+
+        <div>
+          <label class="block text-stone-400 mb-1 font-medium">Special Cooking Instructions (Optional)</label>
+          <input type="text" id="custNotes" placeholder="e.g. Less spicy, extra salan/raita" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="pt-2 border-t border-stone-800 space-y-1 text-stone-300">
+          <div class="flex justify-between">
+            <span>Subtotal:</span>
+            <span id="cartSubtotal" class="font-semibold text-white">₹0</span>
+          </div>
+          <div class="flex justify-between text-stone-400 text-[11px]">
+            <span>Platform Commissions:</span>
+            <span class="text-emerald-400 font-bold">₹0 (Commission Free)</span>
+          </div>
+        </div>
+
+        <!-- WhatsApp Checkout Action -->
+        <button onclick="sendOrderViaWhatsApp()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-emerald-950 transition-all text-sm">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          Send Order to Restaurant WhatsApp
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= TABLE RESERVATION MODAL ================= -->
+  <div id="reservationModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-[#18120D] rounded-2xl border border-brand-gold/30 shadow-2xl p-6 sm:p-8 space-y-5">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-stone-800">
+        <div>
+          <h3 class="font-heading font-bold text-xl gold-gradient-text">Table Reservation</h3>
+          <p class="text-xs text-stone-400">Aathithyam Multi-Cuisine Restaurant • Gandimaisamma</p>
+        </div>
+        <button onclick="closeReservationModal()" class="text-stone-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleReservationSubmit(event)" class="space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-stone-300 mb-1 font-medium">Guest Name *</label>
+            <input type="text" id="resName" required placeholder="Full Name" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+          </div>
+          <div>
+            <label class="block text-stone-300 mb-1 font-medium">Contact Phone *</label>
+            <input type="tel" id="resPhone" required placeholder="10-digit Mobile Number" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-stone-300 mb-1 font-medium">Date *</label>
+            <input type="date" id="resDate" required class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+          </div>
+          <div>
+            <label class="block text-stone-300 mb-1 font-medium">Time Slot *</label>
+            <select id="resTime" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+              <option value="12:30 PM">12:30 PM (Lunch)</option>
+              <option value="01:30 PM">01:30 PM (Lunch)</option>
+              <option value="02:30 PM">02:30 PM (Lunch)</option>
+              <option value="07:30 PM" selected>07:30 PM (Dinner)</option>
+              <option value="08:30 PM">08:30 PM (Dinner)</option>
+              <option value="09:30 PM">09:30 PM (Dinner)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-stone-300 mb-1 font-medium">Guests Count *</label>
+            <select id="resGuests" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+              <option value="2 Guests">2 Persons</option>
+              <option value="4 Guests" selected>4 Persons</option>
+              <option value="6 Guests">6 Persons</option>
+              <option value="8+ Family Group">8+ Family Group</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-stone-300 mb-1 font-medium">Occasion / Special Request</label>
+          <input type="text" id="resOccasion" placeholder="e.g. Birthday celebration, anniversary, high chair needed" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-brand-gold to-brand-goldDark text-stone-950 font-bold rounded-xl shadow-lg hover:brightness-110 transition-all text-sm flex items-center justify-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            Confirm via WhatsApp Booking
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= ADMIN: ADD/EDIT DISH MODAL ================= -->
+  <div id="dishEditModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-[#18120D] rounded-2xl border border-brand-gold/40 shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-800">
+        <h3 id="dishModalTitle" class="font-heading font-bold text-lg text-amber-200">Add New Dish</h3>
+        <button onclick="closeDishModal()" class="text-stone-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleDishFormSubmit(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="editDishId">
+        
+        <div>
+          <label class="block text-stone-300 mb-1 font-medium">Dish Name *</label>
+          <input type="text" id="dishNameInput" required placeholder="e.g. Chicken Dum Biryani" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-stone-300 mb-1 font-medium">Category *</label>
+            <select id="dishCategoryInput" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+              <option value="biryani">Biryanis & Pulaos</option>
+              <option value="starters">Tandoor & Starters</option>
+              <option value="curries">Curries & Naans</option>
+              <option value="desserts">Desserts & Drinks</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-stone-300 mb-1 font-medium">Type *</label>
+            <select id="dishTypeInput" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+              <option value="nonveg">Non-Veg 🔴</option>
+              <option value="veg">Veg 🟢</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-stone-300 mb-1 font-medium">Price (₹) *</label>
+            <input type="number" id="dishPriceInput" required min="1" placeholder="280" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+          </div>
+          <div>
+            <label class="block text-stone-300 mb-1 font-medium">Badge (Optional)</label>
+            <input type="text" id="dishBadgeInput" placeholder="Chef Special / Bestseller" class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-stone-300 mb-1 font-medium">Photo URL (Optional)</label>
+          <input type="url" id="dishImageInput" placeholder="https://images.unsplash.com/..." class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+        </div>
+
+        <div>
+          <label class="block text-stone-300 mb-1 font-medium">Description</label>
+          <textarea id="dishDescInput" rows="2" placeholder="Ingredients, spice level, flavour notes..." class="w-full bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold"></textarea>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="dishSoldOutInput" class="rounded bg-stone-800 border-stone-700 text-brand-gold focus:ring-0">
+          <label for="dishSoldOutInput" class="text-stone-300 font-medium">Mark as Sold Out / Unavailable right now (86)</label>
+        </div>
+
+        <div class="pt-3 flex gap-2">
+          <button type="submit" class="flex-1 py-3 bg-gradient-to-r from-brand-gold to-brand-goldDark text-stone-950 font-bold rounded-xl shadow-lg hover:brightness-110 transition-all text-xs">
+            Save Dish to Menu
+          </button>
+          <button type="button" onclick="closeDishModal()" class="px-4 py-3 bg-stone-800 text-stone-300 font-semibold rounded-xl hover:bg-stone-700 text-xs">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= ADMIN PIN LOGIN POPUP ================= -->
+  <div id="adminPinModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-xs bg-[#18120D] rounded-2xl border border-brand-gold/40 shadow-2xl p-6 text-center space-y-4">
+      <div class="w-12 h-12 rounded-full bg-amber-950 border border-brand-gold/40 mx-auto flex items-center justify-center">
+        <i data-lucide="lock" class="w-6 h-6 text-brand-gold"></i>
+      </div>
+      <div>
+        <h3 class="font-heading font-bold text-lg text-white">Owner Access</h3>
+        <p class="text-xs text-stone-400 mt-1">Enter PIN to toggle live edit mode (Default PIN: <strong class="text-amber-300">1234</strong>)</p>
+      </div>
+      <input type="password" id="adminPinInput" maxlength="6" placeholder="Enter PIN" class="w-full text-center tracking-widest text-lg font-bold bg-stone-900 border border-stone-700 rounded-lg p-2.5 text-stone-200 focus:outline-none focus:border-brand-gold">
+      <div class="flex gap-2">
+        <button onclick="verifyAdminPin()" class="flex-1 py-2.5 bg-brand-gold text-stone-950 font-bold rounded-xl text-xs hover:brightness-110">
+          Unlock
+        </button>
+        <button onclick="closeAdminPinModal()" class="px-4 py-2.5 bg-stone-800 text-stone-300 rounded-xl text-xs">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-stone-900 text-amber-200 border border-brand-gold/50 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 text-xs">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMsg">Saved successfully</span>
+  </div>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    // Storage Keys
+    const STORAGE_KEY_MENU = "aathithyam_menu_v1";
+    const STORAGE_KEY_INFO = "aathithyam_info_v1";
+    const ADMIN_PIN = "1234";
+
+    // Default Restaurant Meta Info
+    const defaultInfo = {
+      phone: "+91 9182700145",
+      cleanPhone: "919182700145",
+      instagram: "@aathithyam26",
+      announcement: "Welcome to Aathithyam • Authentic Flavours & Warm Hospitality at Gandimaisamma",
+      heroBadge: "Gandimaisamma's Favorite Family Dine-in",
+      tagline: "\"Good Food Brings People Together\"",
+      subPillars: "Great Food • Great Vibes • Great Memories",
+      aboutTitle: "Hyderabad’s Rich Culinary Heritage, Served with Love.",
+      aboutDesc: "At Aathithyam (ఆతిథ్యం), we believe every meal is a celebration. Located conveniently at Gandimaisamma, we offer families and food enthusiasts an authentic feast of fragrant slow-cooked Biryanis, sizzling clay-oven tandoori starters, creamy gravies, and comforting multi-cuisine delights.",
+      address: "Aathithyam Multi-Cuisine Family Restaurant, Gandimaisamma, Hyderabad, Telangana.",
+      hours: "11:30 AM – 11:00 PM"
+    };
+
+    // Default Menu Database
+    const defaultMenu = [
+      {
+        id: "b1",
+        name: "Aathithyam Special Chicken Biryani",
+        category: "biryani",
+        type: "nonveg",
+        price: 320,
+        desc: "Fragrant basmati rice cooked on dum with tender spiced chicken pieces and rich saffron essence. Served with mirchi ka salan and dahi raita.",
+        image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80",
+        badge: "Chef's Signature",
+        soldOut: false
+      },
+      {
+        id: "b2",
+        name: "Hyderabadi Mutton Dum Biryani",
+        category: "biryani",
+        type: "nonveg",
+        price: 420,
+        desc: "Slow-braised succulent tender mutton layered with aromatic long-grain aged rice and caramelized onions.",
+        image: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=600&q=80",
+        badge: "Bestseller",
+        soldOut: false
+      },
+      {
+        id: "b3",
+        name: "Paneer Tikka Dum Biryani",
+        category: "biryani",
+        type: "veg",
+        price: 270,
+        desc: "Charcoal roasted marinated cottage cheese cubes infused with spiced aromatic basmati rice.",
+        image: "https://images.unsplash.com/photo-1645177628172-a94c1f96e6db?auto=format&fit=crop&w=600&q=80",
+        soldOut: false
+      },
+      {
+        id: "s1",
+        name: "Tandoori Chicken (Half / Full)",
+        category: "starters",
+        type: "nonveg",
+        price: 290,
+        desc: "Classic clay oven roasted bone chicken steeped in Kashmiri red chilies, hung yogurt, and mustard oil.",
+        image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=600&q=80",
+        badge: "Must Try",
+        soldOut: false
+      },
+      {
+        id: "s2",
+        name: "Murgh Malai Tikka",
+        category: "starters",
+        type: "nonveg",
+        price: 310,
+        desc: "Melt-in-mouth boneless chicken tenders steeped in fresh cream, mild green cardamom, and cashew paste.",
+        image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=600&q=80",
+        soldOut: false
+      },
+      {
+        id: "s3",
+        name: "Crispy Corn & Pepper Fry",
+        category: "starters",
+        type: "veg",
+        price: 210,
+        desc: "Sweet American golden corn kernels tossed with cracked pepper, spring onions, and garlic herbs.",
+        image: "https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=600&q=80",
+        soldOut: false
+      },
+      {
+        id: "c1",
+        name: "Butter Chicken (Murgh Makhani)",
+        category: "curries",
+        type: "nonveg",
+        price: 310,
+        desc: "Tender tandoori chicken cooked in a velvety, buttery tomato gravy scented with dried fenugreek leaves.",
+        image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=600&q=80",
+        badge: "Crowd Favorite",
+        soldOut: false
+      },
+      {
+        id: "c2",
+        name: "Paneer Butter Masala",
+        category: "curries",
+        type: "veg",
+        price: 260,
+        desc: "Soft cottage cheese chunks simmered in a mildly sweet and rich butter-cashew nut gravy.",
+        image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=600&q=80",
+        soldOut: false
+      },
+      {
+        id: "c3",
+        name: "Garlic Butter Naan & Butter Roti Basket",
+        category: "curries",
+        type: "veg",
+        price: 110,
+        desc: "Tandoor crisped leavened bread brushed generously with garlic butter and fresh cilantro.",
+        image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80",
+        soldOut: false
+      },
+      {
+        id: "d1",
+        name: "Authentic Hyderabadi Double Ka Meetha",
+        category: "desserts",
+        type: "veg",
+        price: 140,
+        desc: "Golden fried bread infused in reduced saffron milk, garnished with pistachios and roasted almonds.",
+        image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+        badge: "Traditional",
+        soldOut: false
+      },
+      {
+        id: "d2",
+        name: "Shahi Gulab Jamun with Rabdi",
+        category: "desserts",
+        type: "veg",
+        price: 130,
+        desc: "Warm khoya dumplings soaked in rose syrup, topped with thick condensed rabdi cream.",
+        image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80",
+        soldOut: false
+      }
+    ];
+
+    // App State
+    let menuData = [];
+    let restaurantInfo = {};
+    let isAdminMode = false;
+    let currentCategory = "all";
+    let cart = [];
+    let selectedOrderType = "Takeaway / Pickup";
+
+    // Load from LocalStorage
+    function initData() {
+      try {
+        const storedMenu = localStorage.getItem(STORAGE_KEY_MENU);
+        menuData = storedMenu ? JSON.parse(storedMenu) : defaultMenu;
+      } catch (e) {
+        menuData = defaultMenu;
+      }
+
+      try {
+        const storedInfo = localStorage.getItem(STORAGE_KEY_INFO);
+        restaurantInfo = storedInfo ? { ...defaultInfo, ...JSON.parse(storedInfo) } : { ...defaultInfo };
+      } catch (e) {
+        restaurantInfo = { ...defaultInfo };
+      }
+
+      applyRestaurantInfo();
+    }
+
+    // Save menu to LocalStorage
+    function saveMenu() {
+      localStorage.setItem(STORAGE_KEY_MENU, JSON.stringify(menuData));
+      showToast("Menu changes saved locally");
+    }
+
+    // Save general info to LocalStorage
+    function saveInfo() {
+      localStorage.setItem(STORAGE_KEY_INFO, JSON.stringify(restaurantInfo));
+      showToast("Restaurant details updated");
+    }
+
+    // Apply Restaurant Info to DOM
+    function applyRestaurantInfo() {
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (restaurantInfo[key]) {
+          el.innerText = restaurantInfo[key];
+        }
+      });
+
+      // Update Links
+      const cleanPhone = restaurantInfo.phone.replace(/[^0-9]/g, '');
+      const phoneLinks = [
+        document.getElementById('aboutPhoneLink'),
+        document.getElementById('locationCallBtn'),
+        document.getElementById('footerPhoneLink')
+      ];
+      phoneLinks.forEach(link => {
+        if (link) link.href = `tel:${cleanPhone}`;
+      });
+
+      const heroWhatsApp = document.getElementById('heroWhatsAppBtn');
+      if (heroWhatsApp) {
+        heroWhatsApp.href = `https://wa.me/${cleanPhone}?text=Hello%20Aathithyam!%20I%20would%20like%20to%20make%20an%20inquiry.`;
+      }
+    }
+
+    // Render Menu with Admin Edit Handles
+    function renderMenu(items) {
+      const container = document.getElementById("menuContainer");
+      container.innerHTML = "";
+
+      items.forEach(dish => {
+        const isVeg = dish.type === "veg";
+        const isSoldOut = !!dish.soldOut;
+        
+        const badgeHtml = dish.badge ? `
+          <span class="absolute top-3 left-3 bg-brand-gold text-stone-950 font-bold text-[10px] tracking-wide uppercase px-2.5 py-1 rounded-full shadow-md">
+            ${dish.badge}
+          </span>
+        ` : '';
+
+        const soldOutOverlay = isSoldOut ? `
+          <div class="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex items-center justify-center z-10">
+            <span class="px-3 py-1 bg-red-600/90 text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-lg">
+              Sold Out Today
+            </span>
+          </div>
+        ` : '';
+
+        // Admin Toolbar for Each Dish Card
+        const adminControls = isAdminMode ? `
+          <div class="p-2 bg-stone-950 border-b border-amber-500/30 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-1.5">
+              <button onclick="toggleSoldOut('${dish.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold ${isSoldOut ? 'bg-emerald-700 text-white' : 'bg-amber-600 text-stone-950'}">
+                ${isSoldOut ? 'Make Available' : 'Mark Sold Out (86)'}
+              </button>
+            </div>
+            <div class="flex items-center gap-1">
+              <button onclick="openDishModal('${dish.id}')" class="p-1 text-amber-300 hover:text-white" title="Edit details">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+              </button>
+              <button onclick="deleteDish('${dish.id}')" class="p-1 text-red-400 hover:text-red-300" title="Delete Dish">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        ` : '';
+
+        const card = document.createElement("div");
+        card.className = `rounded-2xl bg-brand-card border ${isSoldOut ? 'border-red-900/30 opacity-75' : 'border-stone-800'} hover:border-brand-gold/40 transition-all flex flex-col justify-between overflow-hidden group relative`;
+        card.innerHTML = `
+          ${adminControls}
+          <div class="relative overflow-hidden h-44 bg-stone-900">
+            <img src="${dish.image || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80'}" alt="${dish.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            ${badgeHtml}
+            ${soldOutOverlay}
+            <div class="absolute top-3 right-3 bg-stone-900/90 border border-stone-700 px-2 py-1 rounded-md flex items-center gap-1.5 shadow z-20">
+              <span class="w-2.5 h-2.5 rounded-full ${isVeg ? 'bg-green-500' : 'bg-red-500'}"></span>
+              <span class="text-[10px] uppercase font-bold tracking-wider ${isVeg ? 'text-green-400' : 'text-red-400'}">
+                ${isVeg ? 'Veg' : 'Non-Veg'}
+              </span>
+            </div>
+          </div>
+          
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <h4 class="font-heading font-bold text-base text-stone-100 ${isAdminMode ? 'cursor-pointer hover:text-amber-300' : ''}" onclick="${isAdminMode ? `openDishModal('${dish.id}')` : ''}">${dish.name}</h4>
+                <span class="font-bold text-brand-gold text-base shrink-0 ${isAdminMode ? 'cursor-pointer underline decoration-dotted' : ''}" onclick="${isAdminMode ? `openDishModal('${dish.id}')` : ''}">₹${dish.price}</span>
+              </div>
+              <p class="text-xs text-stone-400 mt-2 line-clamp-2 leading-relaxed">${dish.desc || ''}</p>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between border-t border-stone-800">
+              <span class="text-[11px] text-stone-500">Portion for 1-2</span>
+              ${isSoldOut ? `
+                <span class="text-xs text-stone-500 italic font-semibold">Unavailable</span>
+              ` : `
+                <button onclick="addToCart('${dish.id}')" class="px-3.5 py-1.5 rounded-lg bg-stone-900 hover:bg-brand-gold hover:text-stone-950 text-brand-gold border border-brand-gold/30 font-semibold text-xs transition-all flex items-center gap-1.5 shadow">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                  Add
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    // Filter Menu
+    function filterMenu(category) {
+      currentCategory = category;
+      document.querySelectorAll(".category-btn").forEach(btn => {
+        btn.classList.remove("active", "bg-brand-gold", "text-stone-950");
+        btn.classList.add("bg-stone-900", "text-stone-300");
+      });
+      if (event && event.target) {
+        event.target.classList.add("active", "bg-brand-gold", "text-stone-950");
+        event.target.classList.remove("bg-stone-900", "text-stone-300");
+      }
+
+      applyFilter();
+    }
+
+    function applyFilter() {
+      if (currentCategory === "all") {
+        renderMenu(menuData);
+      } else {
+        const filtered = menuData.filter(item => item.category === currentCategory);
+        renderMenu(filtered);
+      }
+    }
+
+    // Toggle Sold Out (86)
+    function toggleSoldOut(dishId) {
+      const item = menuData.find(d => d.id === dishId);
+      if (!item) return;
+      item.soldOut = !item.soldOut;
+      saveMenu();
+      applyFilter();
+      showToast(`${item.name} is now ${item.soldOut ? 'Sold Out' : 'Available'}`);
+    }
+
+    // Delete Dish
+    function deleteDish(dishId) {
+      const item = menuData.find(d => d.id === dishId);
+      if (!item) return;
+      if (window.confirm(`Delete "${item.name}" from your menu?`)) {
+        menuData = menuData.filter(d => d.id !== dishId);
+        saveMenu();
+        applyFilter();
+        showToast("Dish removed from menu");
+      }
+    }
+
+    // Open Dish Form Modal (Add or Edit)
+    function openDishModal(dishId = null) {
+      const modal = document.getElementById("dishEditModal");
+      const title = document.getElementById("dishModalTitle");
+      const idField = document.getElementById("editDishId");
+
+      if (dishId) {
+        const item = menuData.find(d => d.id === dishId);
+        if (!item) return;
+        title.textContent = "Edit Dish Details";
+        idField.value = item.id;
+        document.getElementById("dishNameInput").value = item.name;
+        document.getElementById("dishCategoryInput").value = item.category;
+        document.getElementById("dishTypeInput").value = item.type;
+        document.getElementById("dishPriceInput").value = item.price;
+        document.getElementById("dishBadgeInput").value = item.badge || "";
+        document.getElementById("dishImageInput").value = item.image || "";
+        document.getElementById("dishDescInput").value = item.desc || "";
+        document.getElementById("dishSoldOutInput").checked = !!item.soldOut;
+      } else {
+        title.textContent = "Add New Dish";
+        idField.value = "";
+        document.getElementById("dishNameInput").value = "";
+        document.getElementById("dishCategoryInput").value = currentCategory === "all" ? "biryani" : currentCategory;
+        document.getElementById("dishTypeInput").value = "nonveg";
+        document.getElementById("dishPriceInput").value = "";
+        document.getElementById("dishBadgeInput").value = "";
+        document.getElementById("dishImageInput").value = "";
+        document.getElementById("dishDescInput").value = "";
+        document.getElementById("dishSoldOutInput").checked = false;
+      }
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeDishModal() {
+      document.getElementById("dishEditModal").classList.add("hidden");
+    }
+
+    // Save Dish From Modal
+    function handleDishFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById("editDishId").value;
+      const name = document.getElementById("dishNameInput").value.trim();
+      const category = document.getElementById("dishCategoryInput").value;
+      const type = document.getElementById("dishTypeInput").value;
+      const price = parseFloat(document.getElementById("dishPriceInput").value);
+      const badge = document.getElementById("dishBadgeInput").value.trim();
+      const image = document.getElementById("dishImageInput").value.trim();
+      const desc = document.getElementById("dishDescInput").value.trim();
+      const soldOut = document.getElementById("dishSoldOutInput").checked;
+
+      if (!name || isNaN(price)) return;
+
+      if (id) {
+        // Update existing
+        const item = menuData.find(d => d.id === id);
+        if (item) {
+          item.name = name;
+          item.category = category;
+          item.type = type;
+          item.price = price;
+          item.badge = badge;
+          item.image = image;
+          item.desc = desc;
+          item.soldOut = soldOut;
+        }
+      } else {
+        // Create new
+        const newDish = {
+          id: "dish_" + Date.now(),
+          name,
+          category,
+          type,
+          price,
+          badge,
+          image: image || "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80",
+          desc,
+          soldOut
+        };
+        menuData.push(newDish);
+      }
+
+      saveMenu();
+      applyFilter();
+      closeDishModal();
+      showToast("Menu successfully updated!");
+    }
+
+    // Handle Inline Text Edits for General Info
+    function handleInfoBlur(element) {
+      if (!isAdminMode) return;
+      const key = element.getAttribute("data-key");
+      const val = element.innerText.trim();
+      if (key && val) {
+        restaurantInfo[key] = val;
+        saveInfo();
+        applyRestaurantInfo();
+      }
+    }
+
+    // Toggle Admin Mode
+    function toggleAdminPrompt() {
+      if (isAdminMode) {
+        toggleAdminMode();
+      } else {
+        document.getElementById("adminPinModal").classList.remove("hidden");
+        document.getElementById("adminPinInput").value = "";
+        document.getElementById("adminPinInput").focus();
+      }
+    }
+
+    function verifyAdminPin() {
+      const pin = document.getElementById("adminPinInput").value;
+      if (pin === ADMIN_PIN || pin === "1234") {
+        closeAdminPinModal();
+        toggleAdminMode(true);
+      } else {
+        alert("Incorrect PIN. Please try again (Default PIN: 1234)");
+      }
+    }
+
+    function closeAdminPinModal() {
+      document.getElementById("adminPinModal").classList.add("hidden");
+    }
+
+    function toggleAdminMode(forceState = null) {
+      isAdminMode = forceState !== null ? forceState : !isAdminMode;
+      document.body.classList.toggle("admin-mode", isAdminMode);
+      
+      const banner = document.getElementById("adminBanner");
+      const addDishBtn = document.getElementById("addDishBtn");
+      const ownerBtn = document.getElementById("ownerToggleBtn");
+
+      if (isAdminMode) {
+        banner.classList.remove("hidden");
+        addDishBtn.classList.remove("hidden");
+        ownerBtn.classList.add("bg-amber-500", "text-stone-950", "border-amber-400");
+        ownerBtn.querySelector("span").textContent = "Admin Active";
+        // Make text elements editable
+        document.querySelectorAll('[data-editable="info"]').forEach(el => {
+          el.contentEditable = "true";
+        });
+        showToast("Admin Edit Mode Enabled");
+      } else {
+        banner.classList.add("hidden");
+        addDishBtn.classList.add("hidden");
+        ownerBtn.classList.remove("bg-amber-500", "text-stone-950", "border-amber-400");
+        ownerBtn.querySelector("span").textContent = "Owner Login";
+        // Disable contentEditable
+        document.querySelectorAll('[data-editable="info"]').forEach(el => {
+          el.contentEditable = "false";
+        });
+        showToast("Exited Edit Mode");
+      }
+
+      applyFilter();
+    }
+
+    // Save All Edits Manually
+    function saveAllEditsManual() {
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (key) {
+          restaurantInfo[key] = el.innerText.trim();
+        }
+      });
+      saveInfo();
+      saveMenu();
+      showToast("All changes saved permanently!");
+    }
+
+    // Export Backup JSON
+    function exportMenuBackup() {
+      const backupData = {
+        exportedAt: new Date().toISOString(),
+        restaurantInfo,
+        menuData
+      };
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Aathithyam_Menu_Backup_${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("Backup JSON file downloaded");
+    }
+
+    // Import Backup JSON
+    function importMenuBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported.menuData && Array.isArray(imported.menuData)) {
+            menuData = imported.menuData;
+            localStorage.setItem(STORAGE_KEY_MENU, JSON.stringify(menuData));
+          }
+          if (imported.restaurantInfo) {
+            restaurantInfo = imported.restaurantInfo;
+            localStorage.setItem(STORAGE_KEY_INFO, JSON.stringify(restaurantInfo));
+          }
+          applyRestaurantInfo();
+          applyFilter();
+          showToast("Backup restored successfully!");
+        } catch (err) {
+          alert("Invalid backup file. Please upload a valid JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Factory Reset
+    function resetToOriginalDefaults() {
+      if (window.confirm("Are you sure you want to restore factory default menu and restaurant details? Any customized edits will be cleared.")) {
+        localStorage.removeItem(STORAGE_KEY_MENU);
+        localStorage.removeItem(STORAGE_KEY_INFO);
+        menuData = [...defaultMenu];
+        restaurantInfo = { ...defaultInfo };
+        applyRestaurantInfo();
+        applyFilter();
+        showToast("Reset back to default demo data");
+      }
+    }
+
+    // Show Notification Toast
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+      toastMsg.textContent = msg;
+      toast.classList.remove("translate-y-20", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 2500);
+    }
+
+    // ================= CART & ORDERING =================
+    function addToCart(dishId) {
+      const item = menuData.find(d => d.id === dishId);
+      if (!item || item.soldOut) return;
+
+      const existing = cart.find(c => c.id === dishId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...item, qty: 1 });
+      }
+
+      updateCartBadge();
+      updateCartModalContent();
+    }
+
+    function modifyQty(dishId, delta) {
+      const existing = cart.find(c => c.id === dishId);
+      if (!existing) return;
+
+      existing.qty += delta;
+      if (existing.qty <= 0) {
+        cart = cart.filter(c => c.id !== dishId);
+      }
+
+      updateCartBadge();
+      updateCartModalContent();
+    }
+
+    function updateCartBadge() {
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById("navCartCount").textContent = totalCount;
+      document.getElementById("mobileBarCartCount").textContent = totalCount;
+    }
+
+    function updateCartModalContent() {
+      const listContainer = document.getElementById("cartItemList");
+      const subtotalElem = document.getElementById("cartSubtotal");
+
+      if (cart.length === 0) {
+        listContainer.innerHTML = `
+          <div class="text-center py-12 text-stone-500 space-y-2">
+            <i data-lucide="shopping-bag" class="w-10 h-10 mx-auto text-stone-600"></i>
+            <p class="text-xs">Your order tray is empty.</p>
+            <p class="text-[11px] text-stone-600">Browse the menu to add your favorite biryani or starters.</p>
+          </div>
+        `;
+        subtotalElem.textContent = "₹0";
+        lucide.createIcons();
+        return;
+      }
+
+      let subtotal = 0;
+      listContainer.innerHTML = "";
+
+      cart.forEach(item => {
+        const lineTotal = item.price * item.qty;
+        subtotal += lineTotal;
+
+        const row = document.createElement("div");
+        row.className = "flex items-center justify-between p-3 rounded-xl bg-stone-900/90 border border-stone-800 text-xs";
+        row.innerHTML = `
+          <div class="flex-1 mr-2">
+            <p class="font-bold text-stone-200">${item.name}</p>
+            <span class="text-stone-400">₹${item.price} each</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="modifyQty('${item.id}', -1)" class="w-6 h-6 rounded bg-stone-800 hover:bg-stone-700 flex items-center justify-center text-stone-300">-</button>
+            <span class="font-bold text-amber-200">${item.qty}</span>
+            <button onclick="modifyQty('${item.id}', 1)" class="w-6 h-6 rounded bg-stone-800 hover:bg-stone-700 flex items-center justify-center text-stone-300">+</button>
+            <span class="w-12 text-right font-bold text-brand-gold">₹${lineTotal}</span>
+          </div>
+        `;
+        listContainer.appendChild(row);
+      });
+
+      subtotalElem.textContent = `₹${subtotal}`;
+    }
+
+    function setOrderType(type) {
+      selectedOrderType = type;
+      const takeawayBtn = document.getElementById("optTakeaway");
+      const deliveryBtn = document.getElementById("optDelivery");
+      const addressContainer = document.getElementById("addressFieldContainer");
+
+      if (type === "Takeaway / Pickup") {
+        takeawayBtn.className = "py-2 rounded-lg bg-brand-gold text-stone-950 font-bold border border-brand-gold";
+        deliveryBtn.className = "py-2 rounded-lg bg-stone-900 text-stone-300 font-bold border border-stone-700";
+        addressContainer.classList.add("hidden");
+      } else {
+        deliveryBtn.className = "py-2 rounded-lg bg-brand-gold text-stone-950 font-bold border border-brand-gold";
+        takeawayBtn.className = "py-2 rounded-lg bg-stone-900 text-stone-300 font-bold border border-stone-700";
+        addressContainer.classList.remove("hidden");
+      }
+    }
+
+    // Trigger WhatsApp Direct Checkout
+    function sendOrderViaWhatsApp() {
+      if (cart.length === 0) {
+        alert("Please add at least one dish to your order.");
+        return;
+      }
+
+      const name = document.getElementById("custName").value.trim() || "Guest Regular";
+      const notes = document.getElementById("custNotes").value.trim();
+      const address = document.getElementById("custAddress").value.trim();
+
+      let total = 0;
+      let orderItemsText = "";
+
+      cart.forEach((item, index) => {
+        const itemCost = item.price * item.qty;
+        total += itemCost;
+        orderItemsText += `${index + 1}. ${item.name} x ${item.qty} = ₹${itemCost}\n`;
+      });
+
+      let whatsappMsg = `*AATHITHYAM RESTAURANT - NEW ORDER*\n`;
+      whatsappMsg += `------------------------------------\n`;
+      whatsappMsg += `*Order Type:* ${selectedOrderType}\n`;
+      whatsappMsg += `*Customer:* ${name}\n`;
+      if (selectedOrderType === "Home Delivery" && address) {
+        whatsappMsg += `*Delivery Address:* ${address}\n`;
+      }
+      if (notes) {
+        whatsappMsg += `*Special Notes:* ${notes}\n`;
+      }
+      whatsappMsg += `------------------------------------\n`;
+      whatsappMsg += `*Ordered Dishes:*\n${orderItemsText}`;
+      whatsappMsg += `------------------------------------\n`;
+      whatsappMsg += `*Total Order Value:* ₹${total}\n\n`;
+      whatsappMsg += `_Please acknowledge this order & let me know the preparation time._`;
+
+      const cleanPhone = (restaurantInfo.phone || "919182700145").replace(/[^0-9]/g, '');
+      const encoded = encodeURIComponent(whatsappMsg);
+      const url = `https://wa.me/${cleanPhone}?text=${encoded}`;
+      window.open(url, "_blank");
+    }
+
+    // Modals
+    function openCartModal() {
+      updateCartModalContent();
+      document.getElementById("cartModal").classList.remove("hidden");
+    }
+    function closeCartModal() {
+      document.getElementById("cartModal").classList.add("hidden");
+    }
+
+    function openReservationModal() {
+      const today = new Date().toISOString().split('T')[0];
+      const datePicker = document.getElementById("resDate");
+      if (datePicker) datePicker.value = today;
+
+      document.getElementById("reservationModal").classList.remove("hidden");
+    }
+    function closeReservationModal() {
+      document.getElementById("reservationModal").classList.add("hidden");
+    }
+
+    // Handle Reservation Form
+    function handleReservationSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById("resName").value.trim();
+      const phone = document.getElementById("resPhone").value.trim();
+      const date = document.getElementById("resDate").value;
+      const time = document.getElementById("resTime").value;
+      const guests = document.getElementById("resGuests").value;
+      const occasion = document.getElementById("resOccasion").value.trim();
+
+      let msg = `*TABLE RESERVATION REQUEST*\n`;
+      msg += `*Restaurant:* Aathithyam (Gandimaisamma)\n`;
+      msg += `------------------------------------\n`;
+      msg += `*Name:* ${name}\n`;
+      msg += `*Phone:* ${phone}\n`;
+      msg += `*Date:* ${date}\n`;
+      msg += `*Time Slot:* ${time}\n`;
+      msg += `*Group Size:* ${guests}\n`;
+      if (occasion) {
+        msg += `*Occasion/Notes:* ${occasion}\n`;
+      }
+      msg += `------------------------------------\n`;
+      msg += `_Kindly confirm the table availability._`;
+
+      const cleanPhone = (restaurantInfo.phone || "919182700145").replace(/[^0-9]/g, '');
+      const encoded = encodeURIComponent(msg);
+      window.open(`https://wa.me/${cleanPhone}?text=${encoded}`, "_blank");
+      closeReservationModal();
+    }
+
+    // Window Load
+    window.onload = function() {
+      initData();
+      renderMenu(menuData);
+      lucide.createIcons();
+    };
+  </script>
+</body>
+</html>
