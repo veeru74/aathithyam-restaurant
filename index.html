@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aathithyam Restaurant | Authentic Flavours</title>
+  <title>Aathithyam Restaurant | Authentic Flavours - Gandi Maisamma, Hyderabad</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -61,7 +61,7 @@
 </head>
 <body class="bg-brand-charcoal text-slate-100 font-sans antialiased selection:bg-brand-gold selection:text-black min-h-screen flex flex-col justify-between">
 
-  <!-- ================= OWNER LIVE EDIT BAR (VISIBLE WHEN OWNER IS LOGGED IN) ================= -->
+  <!-- ================= OWNER LIVE EDIT BAR ================= -->
   <div id="adminBanner" class="hidden sticky top-0 z-50 bg-amber-500 text-stone-950 px-4 py-2.5 text-xs font-semibold shadow-2xl border-b border-amber-600">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-2">
@@ -99,7 +99,7 @@
         </div>
         <div>
           <span class="font-serif text-2xl font-bold tracking-wider text-brand-gold">AATHITHYAM</span>
-          <span class="block text-[10px] tracking-widest text-slate-400 uppercase -mt-1">Authentic Dining</span>
+          <span class="block text-[10px] tracking-widest text-slate-400 uppercase -mt-1">Gandi Maisamma, Hyderabad</span>
         </div>
       </a>
 
@@ -107,12 +107,12 @@
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
         <a href="#menu" class="hover:text-brand-gold transition-colors">Menu</a>
         <a href="#reservation" class="hover:text-brand-gold transition-colors">Reserve Table</a>
+        <a href="#location" class="hover:text-brand-gold transition-colors">Location</a>
         <a href="#contact" class="hover:text-brand-gold transition-colors">Contact</a>
       </nav>
 
       <!-- Cart Button, Phone & Owner Login -->
       <div class="flex items-center gap-3">
-        <!-- Owner Login Button -->
         <button onclick="toggleAdminPrompt()" id="ownerToggleBtn" class="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-brand-surface border border-white/10 text-slate-300 hover:border-brand-gold hover:text-brand-gold transition-all shadow">
           <i class="fa-solid fa-lock text-brand-gold"></i>
           <span class="hidden sm:inline">Owner Login</span>
@@ -132,10 +132,10 @@
   </header>
 
   <!-- ================= HERO SECTION ================= -->
-  <section class="relative py-20 lg:py-32 overflow-hidden border-b border-white/10 bg-gradient-to-b from-brand-surface/40 via-brand-charcoal to-brand-charcoal">
+  <section class="relative py-20 lg:py-28 overflow-hidden border-b border-white/10 bg-gradient-to-b from-brand-surface/40 via-brand-charcoal to-brand-charcoal">
     <div class="max-w-5xl mx-auto px-4 text-center">
       <span class="inline-block py-1 px-4 mb-4 rounded-full text-xs font-semibold tracking-wider uppercase bg-brand-gold/10 text-brand-gold border border-brand-gold/30">
-        Taste the Tradition of Royalty
+        Gandi Maisamma X Rd • Above SBI Bank
       </span>
       <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-tight">
         Aathithyam <span class="text-brand-gold italic">Restaurant</span>
@@ -150,6 +150,10 @@
         </a>
         <a href="#reservation" class="px-7 py-3 rounded-xl bg-brand-surface hover:bg-brand-card text-white font-semibold border border-white/15 transition-all">
           Book a Table
+        </a>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=17.57713614397801,78.42193400653271" target="_blank" class="px-7 py-3 rounded-xl bg-brand-surface hover:bg-brand-card text-emerald-400 border border-emerald-500/30 font-semibold transition-all flex items-center gap-2">
+          <i class="fa-solid fa-diamond-turn-right text-sm"></i>
+          Directions
         </a>
       </div>
     </div>
@@ -183,19 +187,112 @@
 
     <!-- Category Pills Navigation -->
     <div class="overflow-x-auto pb-4 mb-8 -mx-4 px-4 sm:mx-0 sm:px-0">
-      <div id="category-tabs" class="flex gap-2 min-w-max">
-        <!-- Rendered dynamically -->
-      </div>
+      <div id="category-tabs" class="flex gap-2 min-w-max"></div>
     </div>
 
     <!-- Menu Items Grid -->
-    <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <!-- Injected by JavaScript -->
+    <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </section>
+
+  <!-- ================= LOCATION & DIRECTIONS SECTION ================= -->
+  <section id="location" class="py-16 bg-brand-surface/40 border-y border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10">
+        <span class="text-brand-gold text-xs font-bold tracking-widest uppercase">Find Our Restaurant</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mt-1">Location & Directions</h2>
+        <p class="text-slate-400 text-sm mt-2">Conveniently situated at Gandi Maisamma Junction with ample family dining parking</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-brand-card p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl">
+        
+        <!-- Address Details Card -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-gold/10 text-brand-gold border border-brand-gold/20 text-xs font-semibold">
+            <i class="fa-solid fa-building-columns"></i> Above SBI Bank
+          </div>
+
+          <h3 class="font-serif text-2xl font-bold text-white leading-snug">
+            Aathithyam Multi-Cuisine Family Restaurant
+          </h3>
+
+          <div class="space-y-4 text-sm text-slate-300">
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-xl bg-brand-surface border border-white/10 flex items-center justify-center text-brand-gold shrink-0 mt-0.5">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <strong class="text-white block font-medium">Physical Address:</strong>
+                <p data-editable="info" data-key="fullAddress" onblur="handleInfoBlur(this)" class="leading-relaxed text-slate-300 mt-0.5">
+                  NEAR, Gandi Maisamma X Rd, above SBI BANK, Gandi Maisamma, Hyderabad, Telangana 500043
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-brand-surface border border-white/10 flex items-center justify-center text-brand-gold shrink-0">
+                <i class="fa-solid fa-map-pin"></i>
+              </div>
+              <div>
+                <strong class="text-white block font-medium">GPS Coordinates:</strong>
+                <span class="text-xs text-slate-400 font-mono">17.577136, 78.421934</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-brand-surface border border-white/10 flex items-center justify-center text-emerald-400 shrink-0">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div>
+                <strong class="text-white block font-medium">Direct Counter Desk:</strong>
+                <a href="tel:+919182760166" class="text-emerald-400 font-semibold hover:underline">+91 9182760166</a>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-brand-surface border border-white/10 flex items-center justify-center text-brand-gold shrink-0">
+                <i class="fa-solid fa-clock"></i>
+              </div>
+              <div>
+                <strong class="text-white block font-medium">Dining & Takeaway Hours:</strong>
+                <span class="text-slate-300">Open Everyday: 11:30 AM – 11:00 PM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex flex-wrap gap-3">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=17.57713614397801,78.42193400653271" target="_blank" class="px-5 py-2.5 rounded-xl bg-brand-gold hover:bg-brand-darkgold text-black font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-lg shadow-brand-gold/15">
+              <i class="fa-solid fa-diamond-turn-right text-sm"></i>
+              Start GPS Navigation
+            </a>
+            <a href="https://maps.google.com/?q=17.57713614397801,78.42193400653271" target="_blank" class="px-5 py-2.5 rounded-xl bg-brand-surface hover:bg-brand-card text-slate-200 border border-white/10 font-semibold text-xs uppercase tracking-wider flex items-center gap-2 transition-all">
+              <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+              Open in Google Maps
+            </a>
+          </div>
+        </div>
+
+        <!-- Google Maps Embed -->
+        <div class="lg:col-span-7 h-80 sm:h-96 rounded-2xl overflow-hidden border border-white/10 shadow-inner bg-brand-surface relative">
+          <iframe 
+            title="Aathithyam Restaurant Location" 
+            src="https://maps.google.com/maps?q=17.57713614397801,78.42193400653271&hl=en&z=17&output=embed" 
+            class="w-full h-full border-0 filter brightness-95 contrast-105" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+          <div class="absolute bottom-3 left-3 bg-brand-card/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-[11px] text-slate-200 flex items-center gap-2 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Above SBI Bank, Gandi Maisamma X Rd
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
   <!-- ================= TABLE RESERVATION ================= -->
-  <section id="reservation" class="py-20 bg-brand-surface/50 border-y border-white/10">
+  <section id="reservation" class="py-20 bg-brand-charcoal">
     <div class="max-w-4xl mx-auto px-4">
       <div class="text-center mb-10">
         <span class="text-brand-gold text-xs font-bold tracking-widest uppercase">Table Booking</span>
@@ -254,15 +351,17 @@
     </div>
   </section>
 
-  <!-- ================= CONTACT & LOCATION ================= -->
+  <!-- ================= FOOTER ================= -->
   <footer id="contact" class="bg-brand-charcoal py-14 border-t border-white/10 text-slate-400 text-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-10">
       <div>
         <h3 class="font-serif text-xl font-bold text-brand-gold mb-3">AATHITHYAM RESTAURANT</h3>
-        <p data-editable="info" data-key="about" onblur="handleInfoBlur(this)" class="leading-relaxed">
+        <p class="leading-relaxed">
           Serving authentic South Indian, Tandoori, Kebabs, Biryanis, and Chinese delicacies with warm hospitality.
         </p>
-        <p class="mt-4 text-xs text-slate-500">Official Ordering & Reservations</p>
+        <p class="mt-4 text-xs text-slate-500">
+          NEAR, Gandi Maisamma X Rd, above SBI BANK, Gandi Maisamma, Hyderabad, Telangana 500043
+        </p>
       </div>
       <div>
         <h4 class="text-white font-semibold mb-3">Direct Contact</h4>
@@ -277,7 +376,11 @@
           </li>
           <li>
             <i class="fa-solid fa-clock text-brand-gold mr-2"></i>
-            <span data-editable="info" data-key="hours" onblur="handleInfoBlur(this)">Open Daily: 11:30 AM – 11:00 PM</span>
+            Open Daily: 11:30 AM – 11:00 PM
+          </li>
+          <li>
+            <i class="fa-solid fa-location-dot text-brand-gold mr-2"></i>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=17.57713614397801,78.42193400653271" target="_blank" class="text-emerald-400 hover:underline">Get Directions to Restaurant</a>
           </li>
         </ul>
       </div>
@@ -286,12 +389,13 @@
         <div class="flex flex-wrap gap-2">
           <a href="#menu" class="px-3 py-1 bg-brand-surface rounded-lg text-xs hover:text-white">Menu</a>
           <a href="#reservation" class="px-3 py-1 bg-brand-surface rounded-lg text-xs hover:text-white">Book Table</a>
+          <a href="#location" class="px-3 py-1 bg-brand-surface rounded-lg text-xs hover:text-white">Location Map</a>
           <a href="https://wa.me/9182760166" class="px-3 py-1 bg-brand-surface rounded-lg text-xs text-emerald-400 hover:text-white">WhatsApp Desk</a>
         </div>
       </div>
     </div>
     <div class="mt-10 pt-6 text-center text-xs text-slate-600 border-t border-white/5">
-      © 2026 Aathithyam Restaurant. All rights reserved.
+      © 2026 Aathithyam Restaurant. All rights reserved. • Gandi Maisamma X Rd, Hyderabad.
     </div>
   </footer>
 
@@ -309,9 +413,7 @@
       </div>
       <p class="text-xs text-slate-400 mb-4">Choose your preferred portion size:</p>
       
-      <div id="modal-variants-container" class="space-y-2 mb-6">
-        <!-- Variant Buttons injected by JS -->
-      </div>
+      <div id="modal-variants-container" class="space-y-2 mb-6"></div>
       
       <button onclick="confirmVariantAddition()" class="w-full py-2.5 rounded-xl bg-brand-gold hover:bg-brand-darkgold text-black font-bold text-sm transition-all">
         Add to Order
@@ -325,7 +427,6 @@
     <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
       <div class="w-screen max-w-md bg-brand-card border-l border-white/10 flex flex-col justify-between shadow-2xl">
         
-        <!-- Cart Header -->
         <div class="p-5 border-b border-white/10 flex items-center justify-between">
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-bag-shopping text-brand-gold"></i>
@@ -336,12 +437,8 @@
           </button>
         </div>
 
-        <!-- Cart Items List -->
-        <div id="cart-items-list" class="p-5 overflow-y-auto flex-1 space-y-4">
-          <!-- Populated by JS -->
-        </div>
+        <div id="cart-items-list" class="p-5 overflow-y-auto flex-1 space-y-4"></div>
 
-        <!-- Cart Footer Checkout -->
         <div class="p-5 border-t border-white/10 bg-brand-surface/40 space-y-4">
           <div class="flex justify-between text-sm text-slate-400">
             <span>Subtotal</span>
@@ -440,7 +537,7 @@
     <span id="toastMsg">Changes saved!</span>
   </div>
 
-  <!-- ================= JAVASCRIPT & COMPLETE DATASET ================= -->
+  <!-- ================= JAVASCRIPT & DATASET ================= -->
   <script>
     const RESTAURANT_WHATSAPP = "9182760166";
     const ADMIN_PIN = "1234";
@@ -596,7 +693,6 @@
       { id: 124, name: "Packaged Drinking Water", cat: "Beverages", veg: true, price: 20 }
     ];
 
-    // State Variables
     let MENU_DATA = [];
     let restaurantInfo = {};
     let isAdminMode = false;
@@ -609,7 +705,6 @@
 
     const CATEGORIES = ["All", "Soups", "Starters", "Tandoori & Kebabs", "Curries", "Chinese", "Biryani & Pulao", "Breads & Rice", "Desserts & Shakes", "Beverages"];
 
-    // Initialize UI
     window.addEventListener("DOMContentLoaded", () => {
       initAppStorage();
       renderCategoryTabs();
@@ -646,7 +741,7 @@
       if (key && val) {
         restaurantInfo[key] = val;
         localStorage.setItem(STORAGE_KEY_INFO, JSON.stringify(restaurantInfo));
-        showToast("Text saved!");
+        showToast("Text updated!");
       }
     }
 
@@ -711,7 +806,6 @@
           : `₹${item.price}`;
         const isSoldOut = !!item.soldOut;
 
-        // Owner Toolbar when in Admin Mode
         const adminControls = isAdminMode ? `
           <div class="p-2 mb-3 bg-black/60 rounded-xl border border-amber-500/30 flex items-center justify-between text-xs">
             <button onclick="toggleSoldOut(${item.id})" class="px-2 py-0.5 rounded text-[10px] font-bold ${isSoldOut ? 'bg-emerald-600 text-white' : 'bg-amber-600 text-black'}">
@@ -763,7 +857,7 @@
       }).join("");
     }
 
-    // ================= OWNER LOGIC & PORTAL =================
+    // ================= OWNER LOGIC =================
     function toggleAdminPrompt() {
       if (isAdminMode) {
         toggleAdminMode();
@@ -826,7 +920,7 @@
     function deleteDish(itemId) {
       const dish = MENU_DATA.find(d => d.id === itemId);
       if (!dish) return;
-      if (confirm(`Are you sure you want to remove "${dish.name}" from the menu?`)) {
+      if (confirm(`Remove "${dish.name}" from menu?`)) {
         MENU_DATA = MENU_DATA.filter(d => d.id !== itemId);
         saveLocalData();
         renderMenu();
@@ -1106,6 +1200,7 @@
       orderText += `--------------------------------------\n`;
       orderText += `👤 *Customer Name*: ${name}\n`;
       orderText += `📝 *Notes/Table/Address*: ${notes}\n`;
+      orderText += `📍 *Restaurant Address*: NEAR, Gandi Maisamma X Rd, above SBI BANK, Gandi Maisamma, Hyderabad\n`;
       orderText += `--------------------------------------\n`;
       orderText += `*ITEMS ORDERED:*\n`;
 
@@ -1141,6 +1236,7 @@
       resText += `⏰ *Time*: ${time}\n`;
       resText += `👥 *Number of Guests*: ${guests}\n`;
       resText += `🪑 *Seating Preference*: ${seating}\n`;
+      resText += `📍 *Location*: Above SBI Bank, Gandi Maisamma X Rd, Hyderabad\n`;
       resText += `💬 *Special Requests*: ${notes}\n`;
       resText += `--------------------------------------\n`;
       resText += `Kindly confirm our table booking. Thank you!`;
